@@ -58,7 +58,7 @@ module.exports = {
     RESEARCH_PAPER: {
       id: 'research-paper',
       name: 'Research Paper',
-      description: 'An original academic paper presenting research findings, typically published in a journal or for a course.',
+      description: 'An original academic paper presenting research findings, written at bachelor, master, or doctoral level.',
       sections: [
         'Title',
         'Abstract',
@@ -74,13 +74,14 @@ module.exports = {
       maxWords: 15000,
       citationStyles: ['APA', 'MLA', 'Chicago', 'IEEE', 'AMA', 'ASA'],
       requiresApproval: false,
-      typicalAudience: 'Academic peers / journal readers',
-      formattingNote: 'Follow journal or course-specific guidelines'
+      typicalAudience: 'Academic peers / journal readers / course instructor',
+      academicLevel: 'bachelor, master, doctoral',
+      formattingNote: 'Most common paper type at all academic levels. Bachelor students write research papers for courses; graduate students publish them in journals.'
     },
     TERM_PAPER: {
       id: 'term-paper',
       name: 'Term Paper',
-      description: 'A research paper written by a student over an academic term, often accounting for a large portion of a grade.',
+      description: 'A research paper written by a student over an academic term, typically at bachelor level, accounting for a large portion of a grade.',
       sections: [
         'Title Page',
         'Abstract (optional)',
@@ -94,7 +95,8 @@ module.exports = {
       citationStyles: ['APA', 'MLA', 'Chicago', 'Harvard'],
       requiresApproval: false,
       typicalAudience: 'Instructor / course grader',
-      formattingNote: 'Typically follows course syllabus guidelines; MLA is common in humanities, APA in social sciences'
+      academicLevel: 'bachelor, master',
+      formattingNote: 'Typically follows course syllabus guidelines; MLA is common in humanities, APA in social sciences. Common bachelor-level assignment.'
     },
     LITERATURE_REVIEW: {
       id: 'literature-review',
