@@ -1,0 +1,30 @@
+name: paper-config
+paperType: research-paper
+citationStyle: APA
+outputFormat: markdown
+validateReferences: true
+generateToc: true
+wordCountTarget: 5000
+strictMode: false
+checkPlagiarism: false
+
+sourceFiles:
+  - draft.md
+  - sources.md
+
+references:
+  - raw: "Smith, J. (2023). Understanding academic writing. Journal of Education, 45(2), 123-145."
+  - raw: "Doe, A. & Brown, L. (2022). Citation practices in digital age. Academic Press."
+  - raw: "Lee, K. (2021). Formatting research papers. Research Methods Review, 12(1), 56-78."
+
+outputPath: output
+
+citationRegex: "\\[(\\d+)\\]"
+
+metadata:
+  title: "Your Paper Title"
+  author: "Your Name"
+  institution: "Your University"
+  course: "Course Code"
+  instructor: "Instructor Name"
+  date: "2026-07-28"

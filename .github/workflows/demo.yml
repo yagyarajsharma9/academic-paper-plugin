@@ -1,0 +1,113 @@
+name: Format Academic Paper
+
+on:
+  pull_request:
+    paths:
+      - '**/*.md'
+      - '**/paper-config.yml'
+      - '**/paper-config.yaml'
+  push:
+    branches: [main, master]
+    paths:
+      - '**/*.md'
+      - '**/paper-config.yml'
+      - '**/paper-config.yaml'
+  workflow_dispatch:
+    inputs:
+      paper-type:
+        description: 'Override paper type'
+        required: false
+        default: ''
+      citation-style:
+        description: 'Override citation style'
+        required: false
+        default: ''
+      validate-references:
+        description: 'Enable reference validation'
+        required: false
+        default: 'true'
+      strict-mode:
+        description: 'Enable strict validation mode'
+        required: false
+        default: 'false'
+      interactive:
+        description: 'Run interactive prompt mode'
+        required: false
+        default: 'false'
+
+jobs:
+  format-paper:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Run interactive setup (if requested)
+        if: ${{ inputs.interactive == 'true' }}
+        uses: ./academic-paper-plugin/action
+        with:
+          interactive: 'true'
+
+      - name: Find paper config file
+        id: find-config
+        run: |
+          CONFIG_FILE=""
+          if [ -f "paper-config.yml" ]; then
+            CONFIG_FILE="paper-config.yml"
+          elif [ -f "paper-config.yaml" ]; then
+            CONFIG_FILE="paper-config.yaml"
+          fi
+          echo "config_file=$CONFIG_FILE" >> $GITHUB_OUTPUT
+
+      - name: Format Academic Paper
+        uses: ./academic-paper-plugin/action
+        with:
+          paper-config: ${{ steps.find-config.outputs.config_file || 'paper-config.yml' }}
+          paper-type: ${{ inputs.paper-type }}
+          citation-style: ${{ inputs.citation-style }}
+          output-format: 'markdown'
+          validate-references: ${{ inputs.validate-references }}
+          generate-toc: 'true'
+          strict-mode: ${{ inputs.strict-mode }}
+
+      - name: Upload formatted output
+        uses: actions/upload-artifact@v3
+        with:
+          name: formatted-paper
+          path: output/
+
+      - name: Upload validation report
+        uses: actions/upload-artifact@v3
+        with:
+          name: validation-report
+          path: output/validation-report.json
+
+  validate-only:
+    runs-on: ubuntu-latest
+    needs: format-paper
+    if: always()
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Download formatted output
+        uses: actions/download-artifact@v3
+        with:
+          name: formatted-paper
+
+      - name: Check for validation errors
+        run: |
+          if [ -f "output/validation-report.json" ]; then
+            ERRORS=$(python3 -c "import json; data=json.load(open('output/validation-report.json')); print(len(data.get('errors',[])))")
+            WARNINGS=$(python3 -c "import json; data=json.load(open('output/validation-report.json')); print(len(data.get('warnings',[])))")
+            echo "Validation errors: $ERRORS"
+            echo "Validation warnings: $WARNINGS"
+            if [ "$ERRORS" -gt 0 ]; then
+              echo "Paper has $ERRORS validation error(s)"
+              exit 1
+            else
+              echo "Paper passed validation with $WARNINGS warning(s)"
+            fi
+          fi

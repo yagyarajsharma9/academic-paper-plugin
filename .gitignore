@@ -1,0 +1,13 @@
+node_modules/
+output/
+*.log
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.env
+npm-debug.log*
+coverage/
+.nyc_output

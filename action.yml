@@ -1,0 +1,67 @@
+name: Academic Paper Formatter
+description: AI-powered GitHub Action that detects, formats, and validates academic papers across different types (thesis, research paper, term paper, etc.) and citation styles (APA, MLA, Chicago, IEEE, AMA, ASA)
+author: Academic Paper Plugin Team
+inputs:
+  paper-config:
+    description: Path to the paper configuration YAML file
+    required: false
+    default: paper-config.yml
+  paper-type:
+    description: Override paper type detection (thesis, research-paper, term-paper, dissertation, literature-review, experimental-report, argumentative, exploratory, annotated-bibliography, book-report, research-poster, book-review, essay)
+    required: false
+  citation-style:
+    description: Override citation style (APA, MLA, Chicago-NB, Chicago-AD, IEEE, AMA, ASA)
+    required: false
+  output-format:
+    description: Output format (markdown, html, docx, pdf)
+    required: false
+    default: markdown
+  validate-references:
+    description: Enable reference validation (true/false)
+    required: false
+    default: true
+  template:
+    description: Path to custom template file (optional)
+    required: false
+  generate-toc:
+    description: Generate table of contents (true/false)
+    required: false
+    default: true
+  word-count-target:
+    description: Target word count for the paper
+    required: false
+  check-plagiarism:
+    description: Enable plagiarism check against configured sources (true/false)
+    required: false
+    default: false
+  strict-mode:
+    description: Enable strict validation mode (true/false)
+    required: false
+    default: false
+  interactive:
+    description: Run interactive prompt mode to configure paper settings (true/false)
+    required: false
+    default: false
+  prompt:
+    description: Run quick prompt mode to interactively configure paper (true/false)
+    required: false
+    default: false
+runs:
+  using: docker
+  image: Dockerfile
+  env:
+    PAPER_CONFIG: ${{ inputs.paper-config }}
+    PAPER_TYPE: ${{ inputs.paper-type }}
+    CITATION_STYLE: ${{ inputs.citation-style }}
+    OUTPUT_FORMAT: ${{ inputs.output-format }}
+    VALIDATE_REFERENCES: ${{ inputs.validate-references }}
+    TEMPLATE: ${{ inputs.template }}
+    GENERATE_TOC: ${{ inputs.generate-toc }}
+    WORD_COUNT_TARGET: ${{ inputs.word-count-target }}
+    CHECK_PLAGIARISM: ${{ inputs.check-plagiarism }}
+    STRICT_MODE: ${{ inputs.strict-mode }}
+    INTERACTIVE: ${{ inputs.interactive }}
+    PROMPT: ${{ inputs.prompt }}
+branding:
+  icon: file-text
+  color: blue
